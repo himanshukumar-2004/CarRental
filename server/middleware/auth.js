@@ -10,11 +10,11 @@ export const protect = async (req, res, next)=>{
         const token = authorization.startsWith('Bearer ')
             ? authorization.slice(7)
             : authorization;
-        const userID = jwt.verify(token, process.env.JWT_SECRET)
-        if(!userID){
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if(!decoded || !decoded.id){
            return res.json({success: false, message: "not authorized"})
         }
-        req.user = await User.findById(userID).select("-password")
+        req.user = await User.findById(decoded.id).select("-password")
         next();
     } catch (error) {
        return res.json({success: false, message: "not authorized"}) 

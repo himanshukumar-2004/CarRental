@@ -12,23 +12,7 @@ const Login = () => {
     const [password, setPassword] = React.useState("");
 
     const onSubmitHandler = async (event)=>{
-        try {
-            event.preventDefault();
-            const {data} = await axios.post(`/api/user/${state}`, {name,email, password})
-
-            if (data.success) {
-                navigate('/')
-                setToken(data.token)
-                localStorage.setItem('token' ,data.token)
-                setShowLogin(false)
-            }else{
-                toast.error(data.message)
-            }
-        } catch (error) {
-            toast.error(error.message)
-        }
-        
-
+        event.preventDefault();
         try {
             const url = state === 'login' ? '/api/user/login' : '/api/user/register'
             const payload = state === 'login' ? { email, password } : { name, email, password }
@@ -43,8 +27,10 @@ const Login = () => {
             const token = data.token
             setToken(token)
             localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
             await fetchUser()
             setShowLogin(false)
+            navigate('/')
             toast.success(state === 'login' ? 'Logged in successfully' : 'Account created')
         } catch (error) {
             toast.error(error.response?.data?.message || error.message || 'Request failed')
