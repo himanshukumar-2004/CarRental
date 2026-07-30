@@ -55,11 +55,11 @@ const Dashboard = () => {
 
       <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4 mt-8'>
         {dashboardCards.map((card) => (
-          <div key={card.title} className='rounded-xl border border-gray-200 bg-white p-4 shadow-sm'>
+          <div key={card.title} className='rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm'>
             <div className='flex items-center justify-between'>
               <div>
-                <p className='text-sm text-gray-500'>{card.title}</p>
-                <h3 className='text-2xl font-semibold text-gray-800 mt-1'>{card.value}</h3>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>{card.title}</p>
+                <h3 className='text-2xl font-semibold text-gray-800 dark:text-gray-200 mt-1'>{card.value}</h3>
               </div>
               <img src={card.icon} alt='' className='w-10 h-10' />
             </div>
@@ -68,19 +68,19 @@ const Dashboard = () => {
       </div>
 
       <div className='mt-8 grid gap-4 lg:grid-cols-2'>
-        <div className='rounded-xl border border-gray-200 bg-white p-6 shadow-sm'>
-          <h2 className='text-lg font-semibold text-gray-800'>Recent Bookings</h2>
-          <p className='text-sm text-gray-500'>Latest customer bookings</p>
+        <div className='rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm'>
+          <h2 className='text-lg font-semibold text-gray-800 dark:text-gray-200'>Recent Bookings</h2>
+          <p className='text-sm text-gray-500 dark:text-gray-400'>Latest customer bookings</p>
 
           <div className='mt-4 space-y-2'>
             {data.recentBookings.map((booking, index) => (
-              <div key={index} className='flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2'>
+              <div key={index} className='flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-700 px-3 py-2'>
                 <div>
-                  <p className='font-medium text-gray-800'>{booking.car?.brand} {booking.car?.model}</p>
-                  <p className='text-sm text-gray-500'>{booking.createdAt}</p>
+                  <p className='font-medium text-gray-800 dark:text-gray-200'>{booking.car?.brand} {booking.car?.model}</p>
+                  <p className='text-sm text-gray-500 dark:text-gray-400'>{booking.createdAt}</p>
                 </div>
                 <div className='flex items-center gap-2'>
-                  <p className='text-sm text-gray-500'>{currency}{booking.price}</p>
+                  <p className='text-sm text-gray-500 dark:text-gray-400'>{currency}{booking.price}</p>
                   <span className={`rounded-full px-2 py-1 text-xs ${booking.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                     {booking.status === 'confirmed' ? 'Confirmed' : 'Pending'}
                   </span>
@@ -90,9 +90,9 @@ const Dashboard = () => {
           </div>
         </div>
               {/*monthly revenue*/}
-              <div className='p-4 md:p-6 border border-borderColor rounded-md w-full md:max-w-xs'>
-                <h1 className='text-lg font-medium'>Monthly Revenue</h1>
-                <p className='text-gray-500'>Revenue for current month</p>
+              <div className='p-4 md:p-6 border border-borderColor dark:border-gray-700 rounded-md w-full md:max-w-xs'>
+                <h1 className='text-lg font-medium dark:text-gray-200'>Monthly Revenue</h1>
+                <p className='text-gray-500 dark:text-gray-400'>Revenue for current month</p>
                 <p className='text-3xl mt-6 font-semibold text-primary'>{currency}{data.monthlyRevenue}</p>
 
               </div>

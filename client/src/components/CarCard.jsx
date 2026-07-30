@@ -9,7 +9,7 @@ const CarCard = ({ car = {} }) => {
     const isAvailable = car.isAvailable ?? car.isAvaliable ?? false
 
     return (
-        <div onClick={()=> {navigate(`/car-details/${car._id}`);scrollTo(0,0)}} className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer bg-white">
+        <div onClick={()=> {navigate(`/car-details/${car._id}`);scrollTo(0,0)}} className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer bg-white dark:bg-gray-800">
             <div className="relative h-48 overflow-hidden">
                 <img
                     src={car.image}
@@ -27,11 +27,11 @@ const CarCard = ({ car = {} }) => {
 
             <div className="p-4 sm:p-5">
                 <div className="mb-3">
-                    <h3 className="text-lg font-medium text-gray-800">{car.brand} {car.model}</h3>
-                    <p className="text-sm text-gray-500">{car.category} · {car.year}</p>
+                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">{car.brand} {car.model}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{car.category} · {car.year}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-gray-600">
+                <div className="grid grid-cols-2 gap-2 text-gray-600 dark:text-gray-300">
                     <div className="flex items-center text-sm text-muted-foreground">
                         <img src={assets.users_icon} alt="" className="h-4 mr-2" />
                         <span>{car.seating_capacity} seats</span>

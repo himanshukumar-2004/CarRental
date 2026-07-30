@@ -3,70 +3,38 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { assets, dummyCarData } from '../assets/assets'
 import Loader from '../components/Loader'
 import { useAppContext } from '../context/AppContext'
-import { toast } from 'react-hot-toast'
 
 const CarDetails = () => {
+
   const { id } = useParams()
+  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate } = useAppContext
   const navigate = useNavigate()
   const [car, setCar] = useState(null)
-
-  const {
-    cars,
-    axios,
-    currency,
-    user,
-    setShowLogin,
-    pickupDate,
-    setPickupDate,
-    returnDate,
-    setReturnDate,
-  } = useAppContext()
-
-  useEffect(() => {
-    if (cars && cars.length > 0) {
-      const foundCar = cars.find((c) => c._id === id)
-      if (foundCar) {
-        setCar(foundCar)
-        return
-      }
-    }
-    // Fallback to dummy data if not found in context cars
-    const dummyFound = dummyCarData.find((c) => c._id === id)
-    if (dummyFound) {
-      setCar(dummyFound)
-    }
-  }, [cars, id])
+  const currency = import.meta.env.VITE_CURRENCY
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!user) {
-      toast.error('Please login to book a car')
-      setShowLogin(true)
-      return
-    }
-
-    if (!pickupDate || !returnDate) {
-      toast.error('Please select pickup and return dates')
-      return
-    }
-
+    e.preventDefault();
     try {
       const { data } = await axios.post('/api/bookings/create', {
         car: id,
         pickupDate,
-        returnDate,
+        returnDate
       })
 
       if (data.success) {
-        toast.success(data.message || 'Booking Created Successfully!')
+        toast.success(data.message)
         navigate('/my-bookings')
       } else {
-        toast.error(data.message || 'Failed to book car')
+        toast.error(data.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message)
+      toast.success(error.message)
     }
   }
+
+  useEffect(() => {
+    setCar(Cars.find(c => c._id === id) ?? null)
+  }, [cars, id])
 
   return car ? (
     <div className='px-6 md:px-16 lg:px-24 xl:px-32 mt-16'>
@@ -123,25 +91,20 @@ const CarDetails = () => {
             <div>
               <h2 className='text-xl font-medium mb-3'>Features</h2>
               <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                {['360 camera', 'Bluetooth', 'GPS', 'Heated Seats', 'Rear View Mirror'].map(
-                  (item) => (
-                    <li key={item} className='flex items-center text-gray-500'>
-                      <img src={assets.check_icon} alt='' className='h-4 mr-2' />
-                      {item}
-                    </li>
-                  )
-                )}
+                {['360 camera', 'Bluetooth', 'GPS', 'Heated Seats', 'Rear View Mirror'].map(item => (
+                  <li key={item} className='flex items-center text-gray-500'>
+                    <img src={assets.check_icon} alt='' className='h-4 mr-2' />
+                    {item}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </div>
 
         {/* Right: Booking Form */}
-        <form
-          onSubmit={handleSubmit}
-          className='shadow-lg h-max sticky top-16 rounded-xl p-6 space-y-6 text-gray-500 bg-white border border-gray-100'
-        >
-          <p className='flex items-center justify-between text-2xl text-gray-800 font-semibold'>
+        <form onSubmit={handleSubmit} className='shadow-lg h-max sticky top-16 rounded-xl p-6 space-y-6 text-gray-500'>
+          <p className='flex items-center justify-between text-2xl text-gray-800'>
             {currency}{car.pricePerDay}
             <span className='text-base text-gray-400 font-normal'>per day</span>
           </p>
@@ -149,38 +112,33 @@ const CarDetails = () => {
 
           <div className='flex flex-col gap-2'>
             <label htmlFor='pickup-date'>Pickup Date</label>
-            <input
+            <input value={pickupDate} onChange={(e) => setPickupDate(e.target.value)}
               type='date'
               id='pickup-date'
-              value={pickupDate || ''}
-              onChange={(e) => setPickupDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]}
-              className='border border-borderColor px-3 py-2 rounded-lg text-gray-700 outline-none focus:border-primary'
+              className='border border-borderColor px-3 py-2 rounded-lg'
               required
             />
           </div>
 
           <div className='flex flex-col gap-2'>
             <label htmlFor='return-date'>Return Date</label>
-            <input
+            <input value={returnDate} onChange={(e) => setReturnDate(e.target.value)}
               type='date'
               id='return-date'
-              value={returnDate || ''}
-              onChange={(e) => setReturnDate(e.target.value)}
-              min={pickupDate || new Date().toISOString().split('T')[0]}
-              className='border border-borderColor px-3 py-2 rounded-lg text-gray-700 outline-none focus:border-primary'
+              className='border border-borderColor px-3 py-2 rounded-lg'
               required
             />
           </div>
 
           <button
-            type='submit'
-            className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer shadow'
+            type='button'
+            className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer'
           >
             Book Now
           </button>
 
-          <p className='text-center text-sm text-gray-400'>No credit card required to reserve</p>
+          <p className='text-center text-sm'>No credit card required to reserve</p>
         </form>
       </div>
     </div>

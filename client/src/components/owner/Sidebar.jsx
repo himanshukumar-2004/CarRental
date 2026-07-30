@@ -41,7 +41,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='relative min-h-screen md:flex flex-col items-center pt-8 max-w-13 md:max-w-60 w-full border-r border-borderColor text-sm'>
+    <div className='relative min-h-screen md:flex flex-col items-center pt-8 max-w-13 md:max-w-60 w-full border-r border-borderColor dark:border-gray-700 text-sm'>
       <div className='group relative'>
         <label htmlFor='image'>
           <img
@@ -67,7 +67,7 @@ const Sidebar = () => {
         </button>
       )}
 
-      <p className='mt-2 text-base max-md:hidden'>{user?.name}</p>
+      <p className='mt-2 text-base max-md:hidden dark:text-gray-200'>{user?.name}</p>
 
       <div className='w-full'>
         {ownerMenuLinks.map((link, index) => {
@@ -77,7 +77,7 @@ const Sidebar = () => {
             <NavLink
               key={index}
               to={link.path}
-              className={`relative flex items-center gap-2 w-full py-3 pl-4 first:mt-6 ${isActive ? 'bg-primary/10 text-primary' : 'text-gray-600'}`}
+              className={`relative flex items-center gap-2 w-full py-3 pl-4 first:mt-6 ${isActive ? 'bg-primary/10 text-primary' : 'text-gray-600 dark:text-gray-400'}`}
             >
               <img src={isActive ? link.coloredIcon : link.icon} alt='' />
               <span className='max-md:hidden'>{link.name}</span>

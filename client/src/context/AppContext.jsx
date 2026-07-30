@@ -21,6 +21,14 @@ export const AppProvider = ({ children })=>{
 
     const [cars, setCars] = useState([])
 
+    const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'light')
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light'
+        setTheme(newTheme)
+        localStorage.setItem('theme', newTheme)
+    }
+
 
     //Function to check if user is logged in
     const fetchUser = async ()=>{
@@ -79,7 +87,7 @@ export const AppProvider = ({ children })=>{
     const value = {
        navigate, currency, axios, user, setUser, token, setToken, isOwner, setIsOwner, fetchUser,
        showLogin, setShowLogin, logout, fetchCars, cars, setCars, pickupDate,
-       setPickupDate, returnDate, setReturnDate
+       setPickupDate, returnDate, setReturnDate, theme, toggleTheme
       
     }
     return (

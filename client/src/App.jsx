@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
@@ -18,7 +18,16 @@ import { useAppContext } from './context/AppContext'
 
 const App = () => {
 
-    const { showLogin } = useAppContext()
+    const { showLogin, theme } = useAppContext()
+    
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }, [theme])
+
     const isOwnerPath = useLocation().pathname.startsWith('/owner')
   return (
     <>
