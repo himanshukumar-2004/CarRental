@@ -16,8 +16,11 @@ export const checkAvailabilityOfCar = async (req, res)=>{
     try {
         const {location, pickupDate, returnDate} = req.body
 
-        //fetch all available cars for the given location
-        const cars = await Car.find({location, isAvailable: true})
+        const query = { isAvailable: true }
+        if (location) {
+            query.location = { $regex: new RegExp(`^${location}$`, 'i') }
+        }
+        const cars = await Car.find(query)
 
 
 
