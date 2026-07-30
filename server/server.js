@@ -7,19 +7,19 @@ import ownerRouter from "./routes/ownerRoute.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 
 //Initialize Express App
-const app= express()
+const app = express()
 //connect Database
 await connectDB()
 
 //Middleware
 app.use(cors({
-    origin: ["https://car-rental-chi-amber.vercel.app", "http://localhost:5173"],
-    credentials: true,
+	origin: ["https://rentyourdreamcar.vercel.app/", "http://localhost:5173"],
+	credentials: true,
 }));
 app.use(express.json());
 
-app.get('/' , (req, res)=> res.send("Server is running"))
-app.use('/api/user',userRouter)
+app.get('/', (req, res) => res.send("Server is running"))
+app.use('/api/user', userRouter)
 app.use('/api/owner', ownerRouter)
 app.use('/api/bookings', bookingRouter)
 
@@ -35,4 +35,4 @@ app.use((error, req, res, next) => {
 })
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT,()=>console.log(`Server running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
