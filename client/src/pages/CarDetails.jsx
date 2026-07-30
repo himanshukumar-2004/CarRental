@@ -7,7 +7,7 @@ import { useAppContext } from '../context/AppContext'
 const CarDetails = () => {
 
   const { id } = useParams()
-  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate } = useAppContext
+  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate } = useAppContext()
   const navigate = useNavigate()
   const [car, setCar] = useState(null)
   const currency = import.meta.env.VITE_CURRENCY
@@ -33,7 +33,7 @@ const CarDetails = () => {
   }
 
   useEffect(() => {
-    setCar(Cars.find(c => c._id === id) ?? null)
+    setCar(cars.find(c => c._id === id) ?? null)
   }, [cars, id])
 
   return car ? (
