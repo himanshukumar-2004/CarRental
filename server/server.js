@@ -13,7 +13,7 @@ await connectDB()
 
 //Middleware
 app.use(cors({
-	origin: ["https://rentyourdreamcar.vercel.app/", "http://localhost:5173"],
+	origin: ["https://rentyourdreamcar.vercel.app", "http://localhost:5173"],
 	credentials: true,
 }));
 app.use(express.json());
