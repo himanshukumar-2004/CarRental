@@ -135,11 +135,11 @@ const AddCar = () => {
             </div>
 
             <div className='flex flex-col w-full'>
-              <label>Daily Price ($)</label>
+              <label>Daily Price (₹)</label>
               <input
                 type='number'
                 min='0'
-                placeholder='e.g. 120'
+                placeholder='e.g. 2000'
                 required
                 className='px-3 py-2 mt-1 border border-borderColor dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-md outline-none'
                 value={car.pricePerDay}

@@ -51,7 +51,7 @@ const CarDetails = () => {
         <div className='lg:col-span-2'>
           <img
             src={car.image}
-            alt={`${car.brand} ${car.model}`}
+            alt={`₹{car.brand} ₹{car.model}`}
             className='w-full h-auto max-h-96 object-cover rounded-xl mb-6 shadow-md'
           />
 
@@ -69,7 +69,7 @@ const CarDetails = () => {
 
             <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
               {[
-                { icon: assets.users_icon, text: `${car.seating_capacity} Seats` },
+                { icon: assets.users_icon, text: `₹{car.seating_capacity} Seats` },
                 { icon: assets.fuel_icon, text: car.fuel_type },
                 { icon: assets.car_icon, text: car.transmission },
                 { icon: assets.location_icon, text: car.location },
