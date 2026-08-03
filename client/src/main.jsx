@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import{BrowserRouter} from 'react-router-dom'
 import { AppProvider } from './context/AppContext.jsx'
+import {MotionConfig} from 'motion/react';
 
 const rootElement = document.getElementById('root')
 
@@ -15,7 +16,9 @@ createRoot(rootElement).render(
   <StrictMode>
     <BrowserRouter>
       <AppProvider>
-        <App />
+        <MotionConfig viewport={{ once: true }}>
+          <App />
+        </MotionConfig>
       </AppProvider>
     </BrowserRouter>
   </StrictMode>,
