@@ -86,7 +86,7 @@ const ManageCars = () => {
             <div className='text-gray-600 dark:text-gray-300'>{car.category}</div>
             <div className='text-gray-600 dark:text-gray-300'>₹{car.pricePerDay}</div>
             <div>
-              <span className={`rounded-full px-2.5 py-1 text-xs font-medium ₹{car.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${car.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                 {car.isAvailable ? 'Available' : 'Unavailable'}
               </span>
             </div>
