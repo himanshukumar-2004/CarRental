@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { assets, dummyCarData } from '../assets/assets'
 import Loader from '../components/Loader'
 import { useAppContext } from '../context/AppContext'
+import { motion } from 'motion/react'
 
 const CarDetails = () => {
 
@@ -37,19 +38,29 @@ const CarDetails = () => {
   }, [cars, id])
 
   return car ? (
-    <div className='px-6 md:px-16 lg:px-24 xl:px-32 mt-16'>
-      <button
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className='px-6 md:px-16 lg:px-24 xl:px-32 mt-16'>
+      <motion.button
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
         onClick={() => navigate('/cars')}
         className='flex items-center gap-2 mb-6 text-gray-500 cursor-pointer'
       >
         <img src={assets.arrow_icon} alt='' className='rotate-180 opacity-65' />
         Back to all cars
-      </button>
+      </motion.button>
 
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12'>
         {/* Left: Car Image & Details */}
         <div className='lg:col-span-2'>
-          <img
+          <motion.img
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             src={car.image}
             alt={`${car.brand} ${car.model}`}
             className='w-full h-auto max-h-96 object-cover rounded-xl mb-6 shadow-md'
@@ -67,7 +78,11 @@ const CarDetails = () => {
 
             <hr className='border-borderColor my-6' />
 
-            <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className='grid grid-cols-2 sm:grid-cols-4 gap-4'>
               {[
                 { icon: assets.users_icon, text: `${car.seating_capacity} Seats` },
                 { icon: assets.fuel_icon, text: car.fuel_type },
@@ -79,16 +94,22 @@ const CarDetails = () => {
                   <span className='text-sm text-gray-600'>{text}</span>
                 </div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Description */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}>
               <h2 className='text-xl font-medium mb-3'>Description</h2>
               <p className='text-gray-500'>{car.description}</p>
-            </div>
+            </motion.div>
 
             {/* Features */}
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}>
               <h2 className='text-xl font-medium mb-3'>Features</h2>
               <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
                 {['360 camera', 'Bluetooth', 'GPS', 'Heated Seats', 'Rear View Mirror'].map(item => (
@@ -98,12 +119,16 @@ const CarDetails = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Right: Booking Form */}
-        <form onSubmit={handleSubmit} className='shadow-lg h-max sticky top-16 rounded-xl p-6 space-y-6 text-gray-500'>
+        <motion.form
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
+          onSubmit={handleSubmit} className='shadow-lg h-max sticky top-16 rounded-xl p-6 space-y-6 text-gray-500'>
           <p className='flex items-center justify-between text-2xl text-gray-800'>
             {currency}{car.pricePerDay}
             <span className='text-base text-gray-400 font-normal'>per day</span>
@@ -139,9 +164,9 @@ const CarDetails = () => {
           </button>
 
           <p className='text-center text-sm'>No credit card required to reserve</p>
-        </form>
+        </motion.form>
       </div>
-    </div>
+    </motion.div>
   ) : (
     <Loader />
   )
