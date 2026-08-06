@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { assets, dummyCarData } from '../assets/assets'
 import Loader from '../components/Loader'
 import { useAppContext } from '../context/AppContext'
@@ -33,9 +33,15 @@ const CarDetails = () => {
     }
   }
 
+  const location = useLocation()
+
   useEffect(() => {
-    setCar(cars.find(c => c._id === id) ?? null)
-  }, [cars, id])
+    if (location.state && location.state.car) {
+      setCar(location.state.car)
+    } else {
+      setCar(cars.find(c => c._id === id) ?? null)
+    }
+  }, [cars, id, location])
 
   return car ? (
     <motion.div
@@ -157,7 +163,7 @@ const CarDetails = () => {
           </div>
 
           <button
-            type='button'
+            type='submit'
             className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer'
           >
             Book Now

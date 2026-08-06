@@ -9,7 +9,7 @@ const CarCard = ({ car = {} }) => {
     const isAvailable = car.isAvailable ?? car.isAvaliable ?? false
 
     return (
-        <div onClick={()=> {navigate(`/car-details/${car._id}`);scrollTo(0,0)}} className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer bg-white dark:bg-gray-800">
+        <div onClick={()=> {navigate(`/car-details/${car._id}`, {state: {car}});scrollTo(0,0)}} className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer bg-white dark:bg-gray-800">
             <div className="relative h-48 overflow-hidden">
                 <img
                     src={car.image}
