@@ -15,6 +15,7 @@
 .dark {
   --theme-light-bg: #1f2937;
   --theme-border: #374151;
+  color-scheme: dark;
 }
 
 body {

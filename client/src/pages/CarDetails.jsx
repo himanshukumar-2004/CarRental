@@ -100,7 +100,7 @@ const CarDetails = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
         onClick={() => navigate('/cars')}
-        className='flex items-center gap-2 mb-6 text-gray-500 cursor-pointer'
+        className='flex items-center gap-2 mb-6 text-gray-500 dark:text-gray-400 cursor-pointer'
       >
         <img src={assets.arrow_icon} alt='' className='rotate-180 opacity-65' />
         Back to all cars
@@ -120,15 +120,15 @@ const CarDetails = () => {
 
           <div className='space-y-6'>
             <div>
-              <h1 className='text-3xl font-bold'>
+              <h1 className='text-3xl font-bold dark:text-gray-100'>
                 {car.brand} {car.model}
               </h1>
-              <p className='text-gray-500 text-lg'>
+              <p className='text-gray-500 dark:text-gray-400 text-lg'>
                 {car.category} · {car.year}
               </p>
             </div>
 
-            <hr className='border-borderColor my-6' />
+            <hr className='border-borderColor dark:border-gray-700 my-6' />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -143,7 +143,7 @@ const CarDetails = () => {
               ].map(({ icon, text }) => (
                 <div key={text} className='flex flex-col items-center bg-light p-4 rounded-lg'>
                   <img src={icon} alt='' className='h-5 mb-2' />
-                  <span className='text-sm text-gray-600'>{text}</span>
+                  <span className='text-sm text-gray-600 dark:text-gray-300'>{text}</span>
                 </div>
               ))}
             </motion.div>
@@ -153,8 +153,8 @@ const CarDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}>
-              <h2 className='text-xl font-medium mb-3'>Description</h2>
-              <p className='text-gray-500'>{car.description}</p>
+              <h2 className='text-xl font-medium mb-3 dark:text-gray-100'>Description</h2>
+              <p className='text-gray-500 dark:text-gray-400'>{car.description}</p>
             </motion.div>
 
             {/* Features */}
@@ -162,10 +162,10 @@ const CarDetails = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}>
-              <h2 className='text-xl font-medium mb-3'>Features</h2>
+              <h2 className='text-xl font-medium mb-3 dark:text-gray-100'>Features</h2>
               <ul className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
                 {['360 camera', 'Bluetooth', 'GPS', 'Heated Seats', 'Rear View Mirror'].map(item => (
-                  <li key={item} className='flex items-center text-gray-500'>
+                  <li key={item} className='flex items-center text-gray-500 dark:text-gray-400'>
                     <img src={assets.check_icon} alt='' className='h-4 mr-2' />
                     {item}
                   </li>
@@ -180,12 +180,12 @@ const CarDetails = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6, ease: 'easeOut' }}
-          onSubmit={handleSubmit} className='shadow-lg h-max sticky top-16 rounded-xl p-6 space-y-6 text-gray-500'>
-          <p className='flex items-center justify-between text-2xl text-gray-800'>
+          onSubmit={handleSubmit} className='shadow-lg h-max sticky top-16 rounded-xl p-6 space-y-6 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800'>
+          <p className='flex items-center justify-between text-2xl text-gray-800 dark:text-gray-100'>
             {currency}{car.pricePerDay}
-            <span className='text-base text-gray-400 font-normal'>per day</span>
+            <span className='text-base text-gray-400 dark:text-gray-500 font-normal'>per day</span>
           </p>
-          <hr className='border-borderColor my-6' />
+          <hr className='border-borderColor dark:border-gray-700 my-6' />
 
           <div className='flex flex-col gap-2'>
             <label htmlFor='pickup-date'>Pickup Date</label>
@@ -193,7 +193,7 @@ const CarDetails = () => {
               type='date'
               id='pickup-date'
               min={new Date().toISOString().split('T')[0]}
-              className='border border-borderColor px-3 py-2 rounded-lg'
+              className='border border-borderColor dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 px-3 py-2 rounded-lg'
               required
             />
           </div>
@@ -203,7 +203,7 @@ const CarDetails = () => {
             <input value={returnDate} onChange={(e) => setReturnDate(e.target.value)}
               type='date'
               id='return-date'
-              className='border border-borderColor px-3 py-2 rounded-lg'
+              className='border border-borderColor dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 px-3 py-2 rounded-lg'
               required
             />
           </div>
