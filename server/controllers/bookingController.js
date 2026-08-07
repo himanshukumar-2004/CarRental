@@ -1,5 +1,7 @@
 import Booking from "../models/booking.js"
 import Car from "../models/Car.js";
+import razorpayInstance from "../configs/razorpay.js";
+import crypto from "crypto";
 
 // Function to Check Availability of Car for a given date
 const checkAvailabilty = async (car, pickupDate, returnDate)=>{
@@ -59,7 +61,66 @@ export const createBooking = async (req, res)=>{
         const noOfDays = Math.ceil((returned - picked) /(1000 * 60 * 60 * 24))
         const price = carData.pricePerDay * noOfDays;
 
-        await Booking.create({car, owner: carData.owner, user: _id , pickupDate, returnDate, price})
+        //Create a Razorpay order for the booking amount (Razorpay Test Mode)
+        const order = await razorpayInstance.orders.create({
+            amount: Math.round(price * 100), // amount in paise
+            currency: "INR",
+            receipt: `rcpt_${Date.now()}`, // Razorpay caps receipt at 40 chars
+            notes: { car, user: _id.toString(), pickupDate, returnDate }
+        })
+
+        res.json({
+            success: true,
+            message: "Order Created",
+            order,
+            price,
+            key: process.env.RAZORPAY_KEY_ID
+        })
+
+    } catch (error) {
+        console.log(error.message || error.error?.description || error);
+        res.json({success: false, message: error.message || error.error?.description || "Something went wrong"})
+    }
+}
+
+//API to Verify Razorpay Payment and Create Booking
+export const verifyPayment = async (req, res)=>{
+    try {
+        const {_id} = req.user;
+        const {razorpay_order_id, razorpay_payment_id, razorpay_signature, car, pickupDate, returnDate} = req.body;
+
+        const generatedSignature = crypto
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+            .digest('hex');
+
+        if(generatedSignature !== razorpay_signature){
+            return res.json({success: false, message: "Payment verification failed"})
+        }
+
+        const isAvailable = await checkAvailabilty(car, pickupDate, returnDate)
+        if(!isAvailable){
+            return res.json({success: false, message:"Car is not available"})
+        }
+
+        const carData = await Car.findById(car)
+
+        const picked = new Date(pickupDate);
+        const returned = new Date(returnDate);
+        const noOfDays = Math.ceil((returned - picked) /(1000 * 60 * 60 * 24))
+        const price = carData.pricePerDay * noOfDays;
+
+        await Booking.create({
+            car,
+            owner: carData.owner,
+            user: _id,
+            pickupDate,
+            returnDate,
+            price,
+            isPaid: true,
+            razorpayOrderId: razorpay_order_id,
+            razorpayPaymentId: razorpay_payment_id
+        })
 
         res.json({success: true, message: "Booking Created"})
 

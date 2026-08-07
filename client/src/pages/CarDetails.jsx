@@ -4,11 +4,12 @@ import { assets, dummyCarData } from '../assets/assets'
 import Loader from '../components/Loader'
 import { useAppContext } from '../context/AppContext'
 import { motion } from 'motion/react'
+import { toast } from 'react-hot-toast'
 
 const CarDetails = () => {
 
   const { id } = useParams()
-  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate } = useAppContext()
+  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate, user } = useAppContext()
   const navigate = useNavigate()
   const [car, setCar] = useState(null)
   const currency = import.meta.env.VITE_CURRENCY
@@ -22,14 +23,59 @@ const CarDetails = () => {
         returnDate
       })
 
-      if (data.success) {
-        toast.success(data.message)
-        navigate('/my-bookings')
-      } else {
+      if (!data.success) {
         toast.error(data.message)
+        return
       }
+
+      // Open Razorpay Checkout (Test Mode) directly so the user pays before the booking is finalized
+      const options = {
+        key: data.key,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: 'Car Rental',
+        description: `Booking for ${car.brand} ${car.model}`,
+        order_id: data.order.id,
+        prefill: {
+          name: user?.name || '',
+          email: user?.email || ''
+        },
+        theme: {
+          color: '#2563eb'
+        },
+        handler: async (response) => {
+          try {
+            const { data: verifyData } = await axios.post('/api/bookings/verify-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              car: id,
+              pickupDate,
+              returnDate
+            })
+
+            if (verifyData.success) {
+              toast.success(verifyData.message)
+              navigate('/my-bookings')
+            } else {
+              toast.error(verifyData.message)
+            }
+          } catch (error) {
+            toast.error(error.message)
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            toast.error('Payment cancelled')
+          }
+        }
+      }
+
+      const razorpayCheckout = new window.Razorpay(options)
+      razorpayCheckout.open()
+
     } catch (error) {
-      toast.success(error.message)
+      toast.error(error.message)
     }
   }
 
