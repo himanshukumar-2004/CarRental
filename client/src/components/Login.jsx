@@ -7,6 +7,7 @@ const Login = () => {
     const { setShowLogin, axios, setToken, fetchUser ,navigate } = useAppContext()
 
     const [state, setState] = React.useState("login");
+    const [loginAs, setLoginAs] = React.useState("customer");
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -30,7 +31,7 @@ const Login = () => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
             await fetchUser()
             setShowLogin(false)
-            navigate('/')
+            navigate(state === 'login' && loginAs === 'owner' ? '/owner' : '/')
             toast.success(state === 'login' ? 'Logged in successfully' : 'Account created')
         } catch (error) {
             toast.error(error.response?.data?.message || error.message || 'Request failed')
@@ -46,6 +47,24 @@ const Login = () => {
             <p className="text-2xl font-medium m-auto dark:text-white">
                 <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
             </p>
+            {state === "login" && (
+                <div className="flex w-full border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+                    <button
+                        type="button"
+                        onClick={() => setLoginAs("customer")}
+                        className={`w-1/2 py-2 text-sm cursor-pointer transition-all ${loginAs === "customer" ? "bg-primary text-white" : "bg-transparent dark:text-gray-300"}`}
+                    >
+                        Login as Customer
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setLoginAs("owner")}
+                        className={`w-1/2 py-2 text-sm cursor-pointer transition-all ${loginAs === "owner" ? "bg-primary text-white" : "bg-transparent dark:text-gray-300"}`}
+                    >
+                        Login as Owner
+                    </button>
+                </div>
+            )}
             {state === "register" && (
                 <div className="w-full">
                     <p>Name</p>
