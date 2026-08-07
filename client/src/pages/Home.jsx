@@ -4,6 +4,7 @@ import FeaturedSection from '../components/FeaturedSection'
 import Banner from '../components/Banner'
 import Testimonial from '../components/Testimonial'
 import Newsletter from '../components/Newsletter'
+import Chatbot from '../components/Chatbot'
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <Banner />
       <Testimonial />
       <Newsletter />
+      <Chatbot />
     </>
   )
 }
