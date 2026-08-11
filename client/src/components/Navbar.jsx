@@ -2,30 +2,27 @@ import React, { useState } from 'react'
 import { assets, menuLinks } from '../assets/assets'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
-import { toast } from 'react-hot-toast'
 import { motion } from 'motion/react';
 
 const Navbar = () => {
 
-    const { setShowLogin, user, logout, isOwner, axios, setIsOwner, theme, toggleTheme } = useAppContext()
+    const { setShowLogin, user, logout, isOwner, setAuthRole, theme, toggleTheme } = useAppContext()
 
 
     const location = useLocation();
     const [open, setOpen] = useState(false);
     const navigate = useNavigate()
 
-    const changeRole = async () => {
-        try {
-            const { data } = await axios.post('/api/owner/change-role')
-            if (data.success) {
-                setIsOwner(true)
-                toast.success(data.message)
-            } else {
-                toast.error(data.message)
-            }
-        } catch (error) {
-            toast.error(error.message)
-        }
+    // Listing cars requires a dedicated Owner account — never silently upgrade
+    // the customer's current session, just point them at the Owner login/signup tab.
+    const goToOwnerAuth = () => {
+        setAuthRole('owner')
+        setShowLogin(true)
+    }
+
+    const goToCustomerAuth = () => {
+        setAuthRole('customer')
+        setShowLogin(true)
     }
 
     return (
@@ -64,9 +61,9 @@ const Navbar = () => {
                         )}
                     </button>
 
-                    <button onClick={() => isOwner ? navigate('/owner') : changeRole()} className="cursor-pointer">{isOwner ? 'Dashboard' : 'List cars'}</button>
+                    <button onClick={() => isOwner ? navigate('/owner') : goToOwnerAuth()} className="cursor-pointer">{isOwner ? 'Dashboard' : 'List cars'}</button>
 
-                    <button onClick={() => { user ? logout() : setShowLogin(true) }} className="cursor-pointer px-8 py-2 bg bg-primary
+                    <button onClick={() => user ? logout() : goToCustomerAuth()} className="cursor-pointer px-8 py-2 bg bg-primary
                 hover:bg-primary-dull transition-all text-white rounded-lg"> {user ? 'Logout' : 'Login'} </button>
                 </div>
             </div>

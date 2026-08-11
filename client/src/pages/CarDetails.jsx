@@ -9,13 +9,21 @@ import { toast } from 'react-hot-toast'
 const CarDetails = () => {
 
   const { id } = useParams()
-  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate, user } = useAppContext()
+  const { cars, axios, pickupDate, setPickupDate, setReturnDate, returnDate, user, setAuthRole, setShowLogin } = useAppContext()
   const navigate = useNavigate()
   const [car, setCar] = useState(null)
   const currency = import.meta.env.VITE_CURRENCY
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error('Please login to book a car')
+      setAuthRole('customer')
+      setShowLogin(true)
+      return
+    }
+
     try {
       const { data } = await axios.post('/api/bookings/create', {
         car: id,

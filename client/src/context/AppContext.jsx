@@ -16,6 +16,7 @@ export const AppProvider = ({ children })=>{
     const [user, setUser] = useState(null)
     const [isOwner, setIsOwner] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
+    const [authRole, setAuthRole] = useState('customer')
     const [pickupDate, setPickupDate] = useState('')
     const [returnDate, setReturnDate] = useState('')
 
@@ -37,6 +38,7 @@ export const AppProvider = ({ children })=>{
            if (data.success){
             setUser(data.user)
             setIsOwner(data.user.role === 'owner')
+            return data.user
            }else{
             navigate('/')
            }
@@ -86,7 +88,7 @@ export const AppProvider = ({ children })=>{
     
     const value = {
        navigate, currency, axios, user, setUser, token, setToken, isOwner, setIsOwner, fetchUser,
-       showLogin, setShowLogin, logout, fetchCars, cars, setCars, pickupDate,
+       showLogin, setShowLogin, authRole, setAuthRole, logout, fetchCars, cars, setCars, pickupDate,
        setPickupDate, returnDate, setReturnDate, theme, toggleTheme
       
     }

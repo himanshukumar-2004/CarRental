@@ -11,7 +11,7 @@ const generateToken = (userId)=> {
 //Register User
 export const registerUser =async (req,res)=>{
     try {
-        const{name,email,password} = req.body
+        const{name,email,password,role} = req.body
 
         if(!name || !email || !password || password.length < 8){
             return res.json({success: false, message:'fill all the fields'})
@@ -21,14 +21,15 @@ export const registerUser =async (req,res)=>{
             return res.json({success: false, message:'User already exists'})
         }
 
-        
+        const accountRole = role === 'owner' ? 'owner' : 'user'
+
         const hashedPassword = await bcrypt.hash(password, 10)
-        const user = await User.create({name, email, password: hashedPassword})
+        const user = await User.create({name, email, password: hashedPassword, role: accountRole})
         const token = generateToken(user._id.toString())
         res.json({success:true, token})
 
     } catch (error) {
-         console.log(error.message);  
+         console.log(error.message);
          res.json({success: false, message: error.message})
     }
 
@@ -37,7 +38,7 @@ export const registerUser =async (req,res)=>{
 // Login User
 export const loginUser = async (req, res)=>{
     try {
-        const{email,password} = req.body
+        const{email,password,role} = req.body
         const user = await User.findOne({email})
         if(!user){
             return res.json({success: false, message: "User not found"})
@@ -46,16 +47,25 @@ export const loginUser = async (req, res)=>{
         if(!isMatch){
             return res.json({success:false, message: "Invalid Credentials"})
         }
+
+        // If the login form specified an account type, make sure it matches
+        // this account's real role so customers and owners can't cross into
+        // each other's login tab by mistake.
+        if(role && role !== user.role){
+            const actualLabel = user.role === 'owner' ? 'Owner' : 'Customer'
+            return res.json({success: false, message: `This account is registered as a ${actualLabel}. Please login as ${actualLabel}.`})
+        }
+
         const token = generateToken(user._id.toString())
         res.json({success:true, token})
 
-        
+
     } catch (error) {
-        console.log(error.message);  
+        console.log(error.message);
         res.json({success: false, message: error.message})
-        
+
     }
-} 
+}
 
 // Get User data using Token(JWT)
 export const getUserData = async (req, res) =>{

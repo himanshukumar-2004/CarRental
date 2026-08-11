@@ -5,20 +5,24 @@ import { assets } from '../assets/assets'
 
 const Login = () => {
 
-    const { setShowLogin, axios, setToken, fetchUser ,navigate } = useAppContext()
+    const { setShowLogin, axios, setToken, fetchUser, authRole, setAuthRole, navigate } = useAppContext()
 
     const [state, setState] = React.useState("login");
-    const [loginAs, setLoginAs] = React.useState("customer");
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [showPassword, setShowPassword] = React.useState(false);
 
+    // The account role model only knows "user" / "owner" — the UI calls the former "Customer".
+    const accountRole = authRole === 'owner' ? 'owner' : 'user'
+
     const onSubmitHandler = async (event)=>{
         event.preventDefault();
         try {
             const url = state === 'login' ? '/api/user/login' : '/api/user/register'
-            const payload = state === 'login' ? { email, password } : { name, email, password }
+            const payload = state === 'login'
+                ? { email, password, role: accountRole }
+                : { name, email, password, role: accountRole }
 
             const { data } = await axios.post(url, payload)
 
@@ -31,9 +35,9 @@ const Login = () => {
             setToken(token)
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-            await fetchUser()
+            const loggedInUser = await fetchUser()
             setShowLogin(false)
-            navigate(state === 'login' && loginAs === 'owner' ? '/owner' : '/')
+            navigate(loggedInUser?.role === 'owner' ? '/owner' : '/')
             toast.success(state === 'login' ? 'Logged in successfully' : 'Account created')
         } catch (error) {
             toast.error(error.response?.data?.message || error.message || 'Request failed')
@@ -47,25 +51,28 @@ const Login = () => {
         <form onSubmit = {onSubmitHandler} onClick={(e) => e.stopPropagation()} className="flex flex-col 
         gap-4 m-auto items-start p-8 py-12 w-80 sm:w-88 text-gray-500 dark:text-gray-400 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             <p className="text-2xl font-medium m-auto dark:text-white">
-                <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
+                <span className="text-primary">{authRole === "owner" ? "Owner" : "User"}</span> {state === "login" ? "Login" : "Sign Up"}
             </p>
-            {state === "login" && (
-                <div className="flex w-full border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
-                    <button
-                        type="button"
-                        onClick={() => setLoginAs("customer")}
-                        className={`w-1/2 py-2 text-sm cursor-pointer transition-all ${loginAs === "customer" ? "bg-primary text-white" : "bg-transparent dark:text-gray-300"}`}
-                    >
-                        Login as Customer
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setLoginAs("owner")}
-                        className={`w-1/2 py-2 text-sm cursor-pointer transition-all ${loginAs === "owner" ? "bg-primary text-white" : "bg-transparent dark:text-gray-300"}`}
-                    >
-                        Login as Owner
-                    </button>
-                </div>
+            <div className="flex w-full border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+                <button
+                    type="button"
+                    onClick={() => setAuthRole("customer")}
+                    className={`w-1/2 py-2 text-sm cursor-pointer transition-all ${authRole === "customer" ? "bg-primary text-white" : "bg-transparent dark:text-gray-300"}`}
+                >
+                    {state === "login" ? "Login as Customer" : "Sign up as Customer"}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setAuthRole("owner")}
+                    className={`w-1/2 py-2 text-sm cursor-pointer transition-all ${authRole === "owner" ? "bg-primary text-white" : "bg-transparent dark:text-gray-300"}`}
+                >
+                    {state === "login" ? "Login as Owner" : "Sign up as Owner"}
+                </button>
+            </div>
+            {authRole === "owner" && (
+                <p className="-mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Owner accounts get access to the car listing dashboard and are kept separate from customer accounts.
+                </p>
             )}
             {state === "register" && (
                 <div className="w-full">
