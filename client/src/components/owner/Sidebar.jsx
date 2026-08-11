@@ -41,13 +41,13 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='relative min-h-screen md:flex flex-col items-center pt-8 max-w-13 md:max-w-60 w-full border-r border-borderColor dark:border-gray-700 text-sm'>
+    <div className='relative min-h-screen flex flex-col items-center pt-8 max-w-13 md:max-w-60 w-full border-r border-borderColor dark:border-gray-700 text-sm'>
       <div className='group relative'>
         <label htmlFor='image'>
           <img
             src={previewImage || user?.image || 'https://images.unsplash.com/photo-163332755192-727a05c4013d?q=80&w=300'}
             alt='User profile'
-            className='w-14 h-14 rounded-full object-cover'
+            className='w-10 h-10 md:w-14 md:h-14 rounded-full object-cover'
           />
           <input type='file' id='image' accept='image/*' hidden onChange={handleImageChange} />
 

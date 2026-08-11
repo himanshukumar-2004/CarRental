@@ -18,8 +18,9 @@ const Layout = () => {
         <NavbarOwner />
         <div className='flex'>
             <Sidebar />
-            <Outlet />
-
+            <div className='flex-1 min-w-0'>
+                <Outlet />
+            </div>
         </div>
       
     </div>
