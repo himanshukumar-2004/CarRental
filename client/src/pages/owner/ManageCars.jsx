@@ -66,6 +66,8 @@ const ManageCars = () => {
       </div>
 
       <div className='mt-6 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm'>
+        <div className='overflow-x-auto'>
+        <div className='min-w-[720px]'>
         <div className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300'>
           <div>Car</div>
           <div>Category</div>
@@ -102,6 +104,8 @@ const ManageCars = () => {
             </div>
           </div>
         ))}
+        </div>
+        </div>
       </div>
     </div>
   )

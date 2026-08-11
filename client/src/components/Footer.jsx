@@ -46,7 +46,7 @@ const Footer = () => {
             initial={{opacity: 0 , y: 20 }}
             whileInView={{opacity: 1 , y: 0 }}
             transition={{duration: 0.5, delay: 0.4}}
-        className='flex flex-wrap justify-between w-1/2 gap-8'>
+        className='flex flex-wrap justify-between w-full md:w-1/2 gap-8'>
         <div>
           <h2 className='text-base font-medium text-gray-800 dark:text-gray-200 uppercase'>Quick Links</h2>
           <ul className='mt-3 flex flex-col gap-1.5'>

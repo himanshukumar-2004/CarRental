@@ -51,10 +51,17 @@ const Navbar = () => {
             ${location.pathname === "/" ? "bg-light" : "bg-white dark:bg-gray-900"}
             ${open ? " max-sm:translate-x-0" : " max-sm:translate-x-full"}`}>
                 {menuLinks.map((link, index) => (
-                    <Link key={index} to={link.path} >
+                    <Link key={index} to={link.path} onClick={() => setOpen(false)}>
                         {link.name}
                     </Link>
                 ))}
+                <form onSubmit={handleSearch} className='max-sm:flex hidden items-center text-sm gap-2 border border-borderColor dark:border-gray-700 px-3 rounded-full w-full'>
+                    <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="py-2 w-full bg-transparent
+                outline-none placeholder-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Search cars" />
+                    <button type="submit" aria-label="Search" className="cursor-pointer shrink-0">
+                        <img src={assets.search_icon} alt="search" />
+                    </button>
+                </form>
                 <form onSubmit={handleSearch} className='hidden lg:flex items-center text-sm gap-2 border border-borderColor dark:border-gray-700 px-3 rounded-full max-w-56'>
                     <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="py-1.5 w-full bg-transparent
                 outline-none placeholder-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Search cars" />
@@ -72,9 +79,9 @@ const Navbar = () => {
                         )}
                     </button>
 
-                    <button onClick={() => isOwner ? navigate('/owner') : goToOwnerAuth()} className="cursor-pointer">{isOwner ? 'Dashboard' : 'List cars'}</button>
+                    <button onClick={() => { setOpen(false); isOwner ? navigate('/owner') : goToOwnerAuth() }} className="cursor-pointer">{isOwner ? 'Dashboard' : 'List cars'}</button>
 
-                    <button onClick={() => user ? logout() : goToCustomerAuth()} className="cursor-pointer px-8 py-2 bg bg-primary
+                    <button onClick={() => { setOpen(false); user ? logout() : goToCustomerAuth() }} className="cursor-pointer px-8 py-2 bg bg-primary
                 hover:bg-primary-dull transition-all text-white rounded-lg"> {user ? 'Logout' : 'Login'} </button>
                 </div>
             </div>

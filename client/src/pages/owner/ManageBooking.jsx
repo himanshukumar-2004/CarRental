@@ -45,6 +45,14 @@ const ManageBooking = () => {
       </div>
 
       <div className='mt-6 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm'>
+        {bookings.length === 0 ? (
+          <div className='px-4 py-12 text-center text-gray-400 dark:text-gray-500'>
+            <p className='text-lg font-medium'>No bookings yet</p>
+            <p className='text-sm mt-1'>Bookings will appear here when customers book your cars.</p>
+          </div>
+        ) : (
+        <div className='overflow-x-auto'>
+        <div className='min-w-[720px]'>
         <div className='grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr] gap-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300'>
           <div>Car</div>
           <div>Date Range</div>
@@ -53,13 +61,7 @@ const ManageBooking = () => {
           <div>Actions</div>
         </div>
 
-        {bookings.length === 0 ? (
-          <div className='px-4 py-12 text-center text-gray-400 dark:text-gray-500'>
-            <p className='text-lg font-medium'>No bookings yet</p>
-            <p className='text-sm mt-1'>Bookings will appear here when customers book your cars.</p>
-          </div>
-        ) : (
-          bookings.map((booking) => (
+          {bookings.map((booking) => (
           <div key={booking._id} className='grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr] items-center gap-4 border-b border-gray-200 dark:border-gray-700 px-4 py-3 text-sm last:border-b-0'>
             <div className='flex items-center gap-3'>
               <img src={booking.car?.image} alt='' className='h-12 w-12 rounded object-cover' />
@@ -92,7 +94,9 @@ const ManageBooking = () => {
               </select>
             </div>
           </div>
-          ))
+          ))}
+        </div>
+        </div>
         )}
       </div>
     </div>

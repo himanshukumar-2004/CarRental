@@ -19,7 +19,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className='h-screen flex flex-col items-center justify-center gap-14 bg-light text-center'>
+            className='min-h-screen flex flex-col items-center justify-center gap-8 md:gap-14 py-24 md:py-0 bg-light text-center'>
 
             <motion.h1
                 initial={{ y: 50, opacity: 0 }}
@@ -32,7 +32,7 @@ const Hero = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 onSubmit={handleSearch} className='flex flex-col md:flex-row items-start md:items-center justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white dark:bg-gray-800 shadow-[0px_8px_20px_rgba(0,0,0,0.1)]'>
 
-                <div className='flex flex-col md:flex-row items-start md:items-center gap-10 
+                <div className='flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10
          md:ml-8'>
 
                     <div className='flex flex-col items-start gap-2'>
