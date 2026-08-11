@@ -2,6 +2,7 @@ import User from "../models/User.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Car from "../models/Car.js";
+import { checkAvailabilty } from "./bookingController.js";
 
 
 // Generate JWT Token
@@ -83,7 +84,14 @@ export const getUserData = async (req, res) =>{
 export const getCars = async (req, res) =>{
     try {
         const cars = await Car.find({isAvailable: true})
-        res.json({success: true, cars})
+
+        // Exclude cars that are currently booked out (active booking covers today),
+        // so customers only see cars they can actually book right now.
+        const now = new Date()
+        const availability = await Promise.all(cars.map((car) => checkAvailabilty(car._id, now, now)))
+        const availableCars = cars.filter((_, index) => availability[index])
+
+        res.json({success: true, cars: availableCars})
     } catch (error) {
         console.log(error.message);  
         res.json({success: false, message: error.message})

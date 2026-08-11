@@ -4,7 +4,7 @@ import razorpayInstance from "../configs/razorpay.js";
 import crypto from "crypto";
 
 // Function to Check Availability of Car for a given date
-const checkAvailabilty = async (car, pickupDate, returnDate)=>{
+export const checkAvailabilty = async (car, pickupDate, returnDate)=>{
     const bookings = await Booking.find({
         car,
         pickupDate: {$lte: returnDate},

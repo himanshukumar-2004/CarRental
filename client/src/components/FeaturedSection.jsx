@@ -11,6 +11,8 @@ const FeaturedSection = () => {
     const navigate = useNavigate()
     const { cars } = useAppContext()
 
+    const availableCars = (cars || []).filter((car) => car.isAvailable ?? car.isAvaliable ?? false)
+
     return (
         <motion.div 
         initial={{ opacity:0, y:40 }}
@@ -33,7 +35,7 @@ const FeaturedSection = () => {
             transition={{ duration: 1, delay:0.5 }}
             className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12'>
                 {
-                    cars?.slice(0, 6).map((car) => (
+                    availableCars.slice(0, 6).map((car) => (
                         <motion.div key={car._id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           whileInView={{ opacity: 1, scale: 1 }}

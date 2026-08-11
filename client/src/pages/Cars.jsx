@@ -15,10 +15,19 @@ const Cars = () => {
   const pickupLocation = searchParams.get('pickupLocation')
   const pickupDate = searchParams.get('pickupDate')
   const returnDate = searchParams.get('returnDate')
+  const searchQuery = searchParams.get('search')
 
   const { cars, axios } = useAppContext()
 
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState(searchQuery || '')
+
+  // Keep the search box in sync when the navbar search navigates here again
+  // with a new `search` query param while this page is already mounted.
+  useEffect(() => {
+    if (searchQuery !== null) {
+      setInput(searchQuery)
+    }
+  }, [searchQuery])
 
   const isSearchData = pickupDate && returnDate && pickupLocation
   const [filteredCars, setFilteredCars] = useState([])

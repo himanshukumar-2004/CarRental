@@ -11,7 +11,16 @@ const Navbar = () => {
 
     const location = useLocation();
     const [open, setOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate()
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+        const trimmed = searchTerm.trim()
+        if (!trimmed) return
+        navigate(`/cars?search=${encodeURIComponent(trimmed)}`)
+        setOpen(false)
+    }
 
     // Listing cars requires a dedicated Owner account — never silently upgrade
     // the customer's current session, just point them at the Owner login/signup tab.
@@ -46,11 +55,13 @@ const Navbar = () => {
                         {link.name}
                     </Link>
                 ))}
-                <div className='hidden lg:flex items-center text-sm gap-2 border border-borderColor dark:border-gray-700 px-3 rounded-full max-w-56'>
-                    <input type="text" className="py-1.5 w-full bg-transparent
-                outline-none placeholder-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Search products" />
-                    <img src={assets.search_icon} alt="search" />
-                </div>
+                <form onSubmit={handleSearch} className='hidden lg:flex items-center text-sm gap-2 border border-borderColor dark:border-gray-700 px-3 rounded-full max-w-56'>
+                    <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="py-1.5 w-full bg-transparent
+                outline-none placeholder-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Search cars" />
+                    <button type="submit" aria-label="Search" className="cursor-pointer shrink-0">
+                        <img src={assets.search_icon} alt="search" />
+                    </button>
+                </form>
 
                 <div className='flex max-sm:flex-col items-start sm-items-center gap-6'>
                     <button onClick={toggleTheme} className="cursor-pointer p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle Theme">
