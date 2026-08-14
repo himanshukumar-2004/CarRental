@@ -31,6 +31,15 @@ const Login = () => {
                 return
             }
 
+            if (state === 'register') {
+                // Don't auto-login after signup — require the user to sign in explicitly,
+                // so they land on their role-specific page through the normal login flow.
+                toast.success('Account created. Please log in to continue.')
+                setState('login')
+                setPassword('')
+                return
+            }
+
             const token = data.token
             setToken(token)
             localStorage.setItem('token', token)
@@ -38,7 +47,7 @@ const Login = () => {
             const loggedInUser = await fetchUser()
             setShowLogin(false)
             navigate(loggedInUser?.role === 'owner' ? '/owner' : '/')
-            toast.success(state === 'login' ? 'Logged in successfully' : 'Account created')
+            toast.success('Logged in successfully')
         } catch (error) {
             toast.error(error.response?.data?.message || error.message || 'Request failed')
         }
